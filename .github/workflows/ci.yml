@@ -17,8 +17,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION}}
-          key: 'npm'
-      - run: npm install
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
       - run: npm run lint
 
   test:
@@ -31,8 +32,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          key: 'npm'
-      - run: npm install
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
       - run: npm run test
 
   build:
@@ -46,9 +49,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION}}
-          key: 'npm'
+          cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Debug secret (masked)
         run: echo $DEMO_API_KEY
