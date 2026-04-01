@@ -1,0 +1,38 @@
+name: Reusable Node Setup
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: true
+        type: string
+      command:
+        required: true
+        type: string
+        description: 'The npm command to run (e.g., "lint", "test", "build")'
+    secrets:
+      DEMO_API_KEY:
+        required: false
+
+jobs:
+  setup-and-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Debug secret (masked)
+        if: secrets.DEMO_API_KEY != ''
+        run: echo ${{ secrets.DEMO_API_KEY }}
+      
+      - name: Run command
+        run: npm run ${{ inputs.command }}
+        env:
+          DEMO_API_KEY: ${{ secrets.DEMO_API_KEY }}
