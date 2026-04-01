@@ -23,11 +23,14 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION}}
+          node-version: ${{ matrix.node-version }}
           key: 'npm'
       - run: npm install
       - run: npm run test
@@ -37,6 +40,7 @@ jobs:
     needs: [lint, test]
     env: 
       DEMO_API_KEY: ${{ secrets.DEMO_API_KEY }}
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
