@@ -28,10 +28,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
       
-      - name: Debug secret (masked)
-        if: secrets.DEMO_API_KEY != ''
-        run: echo ${{ secrets.DEMO_API_KEY }}
-      
       - name: Run command
         run: npm run ${{ inputs.command }}
         env:
